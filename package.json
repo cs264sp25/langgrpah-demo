@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "start": "tsx --no-warnings ./index.ts",
-    "demo-01": "tsx --no-warnings ./demo_01.ts",
-    "demo-02": "tsx --no-warnings ./demo_02.ts",
-    "demo-03": "tsx --no-warnings ./demo_03.ts",
-    "demo-04": "tsx --no-warnings ./demo_04.ts",
+    "demo-01": "tsx --no-warnings ./demo-01",
+    "demo-02": "tsx --no-warnings ./demo-02",
+    "demo-03": "tsx --no-warnings ./demo-03",
+    "demo-04": "tsx --no-warnings ./demo-04",
+    "demo-05": "tsx --no-warnings ./demo-05",
     "debug": "tsx --inspect-brk ./index.ts",
     "type-check": "tsc --noEmit"
   },
@@ -17,10 +18,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@ai-sdk/openai": "^1.2.0",
     "@langchain/core": "^0.3.42",
     "@langchain/langgraph": "^0.2.52",
     "@langchain/openai": "^0.4.4",
-    "dotenv": "^16.4.7"
+    "ai": "^4.1.52",
+    "dotenv": "^16.4.7",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",

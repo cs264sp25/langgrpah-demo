@@ -11,7 +11,7 @@ This project uses the OpenAI API. You need to create an account and get an API k
 Clone the repository and install the dependencies.
 
 ```bash
-cd openai-assistants
+cd langchain-demo
 pnpm install
 ```
 
@@ -24,11 +24,17 @@ OPENAI_API_KEY=sk-...
 Finally, run the following command to make sure everything is working.
 
 ```bash
-npm run start
+pnpm start
 ```
 
 To run any of the demo files:
 
 ```bash
-npx tsx path/to/demo.ts
+pnpm run demo-01 # or demo-02, demo-03, etc.
+```
+
+To run LangGraph Studio: 
+
+```bash
+npx @langchain/langgraph-cli@latest dev
 ```

@@ -7,7 +7,7 @@ import {
   UpdateType,
 } from "@langchain/langgraph";
 import { ChatOpenAI } from "@langchain/openai";
-import { OPENAI_API_KEY } from "./env";
+import { OPENAI_API_KEY } from "../env";
 
 const llm = new ChatOpenAI({
   model: "gpt-4o-mini",
@@ -71,8 +71,3 @@ graph.addEdge("node", END);
 export const agent = graph.compile();
 agent.name = "Demo 4";
 
-// Execute the graph
-const result = await agent.invoke({ name: "Ali" });
-
-// Print the result
-console.log(result.greetings);

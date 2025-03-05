@@ -1,10 +1,11 @@
 {
   "node_version": "20",
   "graphs": {
-    "demo-1": "./demo_01.ts:agent",
-    "demo-2": "./demo_02.ts:agent",
-    "demo-3": "./demo_03.ts:agent",
-    "demo-4": "./demo_04.ts:agent"
+    "demo-1": "./demo-01/graph.ts:agent",
+    "demo-2": "./demo-02/graph.ts:agent",
+    "demo-3": "./demo-03/graph.ts:agent",
+    "demo-4": "./demo-04/graph.ts:agent",
+    "demo-5": "./demo-05/graph.ts:agent"
   },
   "env": ".env",
   "dependencies": ["."]

@@ -25,9 +25,3 @@ graph.addEdge("node", END);
 // Compile the graph (and export it for LangGraph Studio)
 export const agent = graph.compile();
 agent.name = "Demo 1";
-
-// Execute the graph
-const result = await agent.invoke({ name: "Ali" });
-
-// Print the result
-console.log(result.greetings);
