@@ -1,6 +1,6 @@
 # LangGraph Demo
 
-This demo program uses the OpenAI Assistants APIs to generate "assistants" powered by large language models like GPT-4, that are capable of performing tasks for users including file search (vector search), code interpretation, and function calling.
+This demo project showcases the capabilities of the LangGraph library. It includes a series of demo files that demonstrate how to use the library to build a workflow involving multiple LLMs to solve a complex problem.
 
 ## OpenAI API
 
@@ -33,7 +33,7 @@ To run any of the demo files:
 pnpm run demo-01 # or demo-02, demo-03, etc.
 ```
 
-To run LangGraph Studio: 
+To run LangGraph Studio:
 
 ```bash
 npx @langchain/langgraph-cli@latest dev
