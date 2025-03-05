@@ -4,3 +4,5 @@ node_modules
 .vscode/settings.json
 .env.local
 notes
+# LangGraph API
+.langgraph_api
