@@ -22,7 +22,7 @@ const AgentInput = Annotation.Root({
 });
 
 const AgentOutput = Annotation.Root({
-  formattedEssayPlan: Annotation<string>,
+  completeEssay: Annotation<string>,
 });
 
 const EssayState = Annotation.Root({
@@ -41,6 +41,12 @@ const EssayState = Annotation.Root({
   thesisStatement: Annotation<string>,
   essayOutline: Annotation<any>,
   formattedEssayPlan: Annotation<string>,
+  introductionParagraph: Annotation<string>,
+  bodyParagraph1: Annotation<string>,
+  bodyParagraph2: Annotation<string>,
+  bodyParagraph3: Annotation<string>,
+  conclusionParagraph: Annotation<string>,
+  completeEssay: Annotation<string>,
 });
 
 // Node 1: Analyze the prompt and generate a claim
@@ -183,7 +189,7 @@ const generateOutline = async (state: typeof EssayState.State) => {
   return { essayOutline: object };
 };
 
-// Node 5: Format the final essay plan
+// Node 5: Format the essay plan (keeping this for backward compatibility)
 const formatPlan = async (state: typeof EssayState.State) => {
   const formattedEssayPlan = `${state.essayOutline.introduction.topicSentence} [...]
 ${state.essayOutline.bodyParagraphs[0].topicSentence} [...]
@@ -192,6 +198,172 @@ ${state.essayOutline.bodyParagraphs[2].topicSentence} [...]
 ${state.essayOutline.conclusion.topicSentence} [...]`;
 
   return { formattedEssayPlan };
+};
+
+// Node 6: Write the introduction paragraph
+const writeIntroduction = async (state: typeof EssayState.State) => {
+  const { object } = await generateObject({
+    model: openai("gpt-4o-mini"),
+    schema: z.object({
+      paragraph: z.string(),
+    }),
+    prompt: `Write a complete introduction paragraph for an essay based on the following outline:
+    
+    Topic Sentence: ${state.essayOutline.introduction.topicSentence}
+    Background Information: ${state.essayOutline.introduction.backgroundInfo}
+    Thesis Statement: ${state.essayOutline.introduction.thesis}
+    
+    The introduction should:
+    1. Begin with an engaging hook that captures the reader's attention
+    2. Provide necessary background information on the topic
+    3. End with the thesis statement that clearly states the main argument
+    4. Be approximately 4-6 sentences in length
+    
+    Write a cohesive, well-structured paragraph that flows naturally from one idea to the next.`,
+  });
+  
+  return { introductionParagraph: object.paragraph };
+};
+
+// Node 7: Write the first body paragraph
+const writeBodyParagraph1 = async (state: typeof EssayState.State) => {
+  const { object } = await generateObject({
+    model: openai("gpt-4o-mini"),
+    schema: z.object({
+      paragraph: z.string(),
+    }),
+    prompt: `Write a complete body paragraph for an essay based on the following information:
+    
+    Thesis Statement: ${state.thesisStatement}
+    
+    Topic Sentence: ${state.essayOutline.bodyParagraphs[0].topicSentence}
+    Supporting Points:
+    ${state.essayOutline.bodyParagraphs[0].points.map((point, i) => `${i + 1}. ${point}`).join('\n')}
+    
+    Next Paragraph's Topic: ${state.essayOutline.bodyParagraphs[1].topicSentence}
+    
+    The paragraph should:
+    1. Begin with a clear topic sentence that states the main point
+    2. Include supporting sentences with specific details and examples
+    3. Develop logically from one sentence to the next
+    4. End with a transition to the next paragraph
+    5. Be approximately 5-7 sentences in length
+    
+    Write a cohesive, well-structured paragraph that thoroughly develops the main point.`,
+  });
+  
+  return { bodyParagraph1: object.paragraph };
+};
+
+// Node 8: Write the second body paragraph
+const writeBodyParagraph2 = async (state: typeof EssayState.State) => {
+  const { object } = await generateObject({
+    model: openai("gpt-4o-mini"),
+    schema: z.object({
+      paragraph: z.string(),
+    }),
+    prompt: `Write a complete body paragraph for an essay based on the following information:
+    
+    Thesis Statement: ${state.thesisStatement}
+    
+    Previous Paragraph: ${state.bodyParagraph1}
+    
+    Topic Sentence: ${state.essayOutline.bodyParagraphs[1].topicSentence}
+    Supporting Points:
+    ${state.essayOutline.bodyParagraphs[1].points.map((point, i) => `${i + 1}. ${point}`).join('\n')}
+    
+    Next Paragraph's Topic: ${state.essayOutline.bodyParagraphs[2].topicSentence}
+    
+    The paragraph should:
+    1. Begin with a clear topic sentence that states the main point
+    2. Include supporting sentences with specific details and examples
+    3. Develop logically from one sentence to the next
+    4. End with a transition to the next paragraph
+    5. Be approximately 5-7 sentences in length
+    
+    Write a cohesive, well-structured paragraph that thoroughly develops the main point.`,
+  });
+  
+  return { bodyParagraph2: object.paragraph };
+};
+
+// Node 9: Write the third body paragraph
+const writeBodyParagraph3 = async (state: typeof EssayState.State) => {
+  const { object } = await generateObject({
+    model: openai("gpt-4o-mini"),
+    schema: z.object({
+      paragraph: z.string(),
+    }),
+    prompt: `Write a complete body paragraph for an essay based on the following information:
+    
+    Thesis Statement: ${state.thesisStatement}
+    
+    Previous Paragraph: ${state.bodyParagraph2}
+    
+    Topic Sentence: ${state.essayOutline.bodyParagraphs[2].topicSentence}
+    Supporting Points:
+    ${state.essayOutline.bodyParagraphs[2].points.map((point, i) => `${i + 1}. ${point}`).join('\n')}
+    
+    Conclusion's Topic: ${state.essayOutline.conclusion.topicSentence}
+    
+    The paragraph should:
+    1. Begin with a clear topic sentence that states the main point
+    2. Include supporting sentences with specific details and examples
+    3. Develop logically from one sentence to the next
+    4. End with a transition to the conclusion
+    5. Be approximately 5-7 sentences in length
+    
+    Write a cohesive, well-structured paragraph that thoroughly develops the main point.`,
+  });
+  
+  return { bodyParagraph3: object.paragraph };
+};
+
+// Node 10: Write the conclusion paragraph
+const writeConclusion = async (state: typeof EssayState.State) => {
+  const { object } = await generateObject({
+    model: openai("gpt-4o-mini"),
+    schema: z.object({
+      paragraph: z.string(),
+    }),
+    prompt: `Write a complete conclusion paragraph for an essay based on the following information:
+    
+    Thesis Statement: ${state.thesisStatement}
+    
+    Previous Paragraph: ${state.bodyParagraph3}
+    
+    Conclusion Outline:
+    Topic Sentence: ${state.essayOutline.conclusion.topicSentence}
+    Summary Points: ${state.essayOutline.conclusion.summaryPoints}
+    Final Thought: ${state.essayOutline.conclusion.finalThought}
+    
+    The conclusion should:
+    1. Begin by restating the thesis in different words
+    2. Summarize the main points from the body paragraphs
+    3. End with a thought-provoking final statement that provides closure
+    4. Be approximately 4-6 sentences in length
+    
+    Write a cohesive, well-structured paragraph that effectively concludes the essay.`,
+  });
+  
+  return { conclusionParagraph: object.paragraph };
+};
+
+// Node 11: Assemble the complete essay
+const assembleEssay = async (state: typeof EssayState.State) => {
+  const completeEssay = `# ${state.claim}
+
+${state.introductionParagraph}
+
+${state.bodyParagraph1}
+
+${state.bodyParagraph2}
+
+${state.bodyParagraph3}
+
+${state.conclusionParagraph}`;
+
+  return { completeEssay };
 };
 
 // Create the StateGraph
@@ -214,6 +386,12 @@ graph.addNode("generateReasons", generateReasons);
 graph.addNode("createThesis", createThesis);
 graph.addNode("generateOutline", generateOutline);
 graph.addNode("formatPlan", formatPlan);
+graph.addNode("writeIntroduction", writeIntroduction);
+graph.addNode("writeBodyParagraph1", writeBodyParagraph1);
+graph.addNode("writeBodyParagraph2", writeBodyParagraph2);
+graph.addNode("writeBodyParagraph3", writeBodyParagraph3);
+graph.addNode("writeConclusion", writeConclusion);
+graph.addNode("assembleEssay", assembleEssay);
 
 // Define the flow
 graph.addEdge(START, "analyzePrompt");
@@ -221,8 +399,14 @@ graph.addEdge("analyzePrompt", "generateReasons");
 graph.addEdge("generateReasons", "createThesis");
 graph.addEdge("createThesis", "generateOutline");
 graph.addEdge("generateOutline", "formatPlan");
-graph.addEdge("formatPlan", END);
+graph.addEdge("formatPlan", "writeIntroduction");
+graph.addEdge("writeIntroduction", "writeBodyParagraph1");
+graph.addEdge("writeBodyParagraph1", "writeBodyParagraph2");
+graph.addEdge("writeBodyParagraph2", "writeBodyParagraph3");
+graph.addEdge("writeBodyParagraph3", "writeConclusion");
+graph.addEdge("writeConclusion", "assembleEssay");
+graph.addEdge("assembleEssay", END);
 
 // Compile the graph
 export const agent = graph.compile();
-agent.name = "LangGraph Essay Planner";
+agent.name = "LangGraph Essay Writer";
