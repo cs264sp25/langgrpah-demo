@@ -5,7 +5,9 @@
     "demo-2": "./demo-02/graph.ts:agent",
     "demo-3": "./demo-03/graph.ts:agent",
     "demo-4": "./demo-04/graph.ts:agent",
-    "demo-5": "./demo-05/graph.ts:agent"
+    "demo-5": "./demo-05/graph.ts:agent",
+    "demo-6": "./demo-06/graph.ts:agent",
+    "demo-7": "./demo-07/graph.ts:agent"
   },
   "env": ".env",
   "dependencies": ["."]
